@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Energieoptimierung Umfrage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+```
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        background: #000;
+    }
+
+    .story-container {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .story-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        display: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .story-slide.active {
+        display: block;
+        opacity: 1;
+    }
+
+    .gradient-bg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .bg-intro {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .bg-q1 {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .bg-q2 {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .bg-q3 {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .bg-q4 {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .bg-q5 {
+        background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+    }
+
+    .story-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.2) 70%, rgba(0,0,0,0.5) 100%);
+    }
+
+    .story-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        color: white;
+        z-index: 10;
+    }
+
+    .progress-bars {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 20px;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 3px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 2px;
+    }
+
+    .progress-bar.completed, .progress-bar.active {
+        background: white;
+    }
+
+    .story-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .story-logo {
+        font-size: 32px;
+    }
+
+    .story-info h1 {
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .story-info p {
+        font-size: 13px;
+        opacity: 0.9;
+    }
+
+    .visual-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        min-height: 180px;
+    }
+
+    .minimal-graphic {
+        width: 160px;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255,255,255,0.15);
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .minimal-graphic svg {
+        width: 100px;
+        height: 100px;
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    }
+
+    .question-area {
+        margin-top: auto;
+        margin-bottom: 20px;
+    }
+
+    .question-text {
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1.2;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+        margin-bottom: 24px;
+    }
+
+    .story-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .next-button {
+        background: rgba(255,255,255,0.9);
+        border: 2px solid white;
+        border-radius: 50px;
+        padding: 18px 40px;
+        margin-top: 20px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+        color: #667eea;
+        text-align: center;
+        display: none;
+    }
+
+    .next-button.active {
+        display: block;
+    }
+
+    .option {
+        background: rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.3);
+        border-radius: 16px;
+        padding: 20px 24px;
+        cursor: pointer;
+        font-size: 17px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.2s ease;
+    }
+
+    .option.selected {
+        background: rgba(255,255,255,0.95);
+        color: #000;
+        border-color: white;
+    }
+
+    .intro-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    .intro-logo {
+        font-size: 90px;
+        margin-bottom: 30px;
+    }
+
+    .intro-title {
+        font-size: 48px;
+        font-weight: 900;
+        margin-bottom: 16px;
+    }
+
+    .intro-subtitle {
+        font-size: 20px;
+        margin-bottom: 50px;
+        max-width: 400px;
+    }
+
+    .intro-cta {
+        background: white;
+        color: #000;
+        padding: 20px 50px;
+        border-radius: 50px;
+        font-size: 18px;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .result-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 40px;
+        color: white;
+        z-index: 100;
+    }
+
+    .result-screen.active {
+        display: flex;
+    }
+
+    .celebration {
+        font-size: 100px;
+        margin-bottom: 30px;
+        animation: bounce 1s ease-in-out;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .result-title {
+        font-size: 42px;
+        font-weight: 900;
+        margin-bottom: 20px;
+    }
+
+    .result-text {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+        max-width: 500px;
+    }
+
+    .loading-spinner {
+        display: none;
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255,255,255,0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+
+    .loading-spinner.active {
+        display: block;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .error-message {
+        display: none;
+        background: rgba(255,0,0,0.2);
+        border: 2px solid rgba(255,0,0,0.5);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .error-message.active {
+        display: block;
+    }
+
+    @media (max-width: 480px) {
+        .intro-title { font-size: 36px; }
+        .intro-subtitle { font-size: 17px; }
+        .question-text { font-size: 24px; }
+        .option { font-size: 15px; padding: 18px 20px; }
+        .result-title { font-size: 32px; }
+        .minimal-graphic { width: 140px; height: 140px; }
+        .minimal-graphic svg { width: 80px; height: 80px; }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="story-container">
+        <!-- Intro Slide -->
+        <div class="story-slide active" data-slide="intro">
+            <div class="gradient-bg bg-intro"></div>
+            <div class="story-overlay"></div>
+            <div class="story-content">
+                <div class="intro-content">
+                    <div class="intro-logo">⚡</div>
+                    <h1 class="intro-title">Energieoptimierung</h1>
+                    <p class="intro-subtitle">5 Fragen • 30 Sekunden</p>
+                    <div class="intro-cta" onclick="startSurvey()">Los geht's!</div>
+                </div>
+            </div>
+        </div>
+
+```
+    <!-- Question 1 -->
+    <div class="story-slide" data-question="1">
+        <div class="gradient-bg bg-q1"></div>
+        <div class="story-overlay"></div>
+        <div class="story-content">
+            <div class="progress-bars">
+                <div class="progress-bar active"></div>
+                <div class="progress-bar"></div>
+                <div class="progress-bar"></div>
+                <div class="progress-bar"></div>
+                <div class="progress-bar"></div>
+            </div>
+            <div class="story-header">
+                <div class="story-logo">⚡</div>
+                <div class="story-info">
+                    <h1>Energieoptimierung Survey</h1>
+                    <p>Frage 1 von 5</p>
+                </div>
+            </div>
+            <div class="visual-container">
+                <div class="minimal-graphic">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="35" stroke="white" stroke-width="3" fill="none"/>
+                        <path d="M50 20 L50 50 L70 50" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                        <circle cx="50" cy="50" r="4" fill="white"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="question-area">
+                <div class="question-text">Wo stehst du beim Thema Energieoptimierung?</div>
+                <div class="story-options">
+                    <div class="option" data-value="interessiert">❓ Interessiert mich, weiß aber nicht wo ich anfangen soll</div>
+                    <div class="option" data-value="habe">✅ Habe bereits Smart Home / PV / Wärmepumpe</div>
+                    <div class="option" data-value="eigenheim">🏠 Bin Eigenheimbesitzer & plane Umbau/Optimierung</div>
+                    <div class="option" data-value="mieter">🏢 Bin Mieter / Kann nur eingeschränkt was ändern</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="story-slide" data-question="2">
+        <div class="gradient-bg bg-q2"></div>
+        <div class="story-overlay"></div>
+        <div class="story-content">
+            <div class="progress-bars">
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar active"></div>
+                <div class="progress-bar"></div>
+                <div class="progress-bar"></div>
+                <div class="progress-bar"></div>
+            </div>
+            <div class="story-header">
+                <div class="story-logo">⚡</div>
+                <div class="story-info">
+                    <h1>Energieoptimierung Survey</h1>
+                    <p>Frage 2 von 5</p>
+                </div>
+            </div>
+            <div class="visual-container">
+                <div class="minimal-graphic">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M30 70 L50 30 L70 70 Z" stroke="white" stroke-width="3" fill="none"/>
+                        <line x1="40" y1="55" x2="60" y2="55" stroke="white" stroke-width="3"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="question-area">
+                <div class="question-text">Was ist dir bei einer Lösung am wichtigsten?</div>
+                <div class="story-options">
+                    <div class="option" data-value="guenstig">💰 Günstige & schnelle Umsetzung</div>
+                    <div class="option" data-value="preis">⚖️ Gutes Preis-Leistungs-Verhältnis</div>
+                    <div class="option" data-value="qualitaet">✨ Qualität & Langlebigkeit</div>
+                    <div class="option" data-value="beratung">🤝 Professionelle Beratung & Betreuung</div>
+                </div>
+                <button class="next-button" onclick="nextQuestion()">Weiter →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="story-slide" data-question="3">
+        <div class="gradient-bg bg-q3"></div>
+        <div class="story-overlay"></div>
+        <div class="story-content">
+            <div class="progress-bars">
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar active"></div>
+                <div class="progress-bar"></div>
+                <div class="progress-bar"></div>
+            </div>
+            <div class="story-header">
+                <div class="story-logo">⚡</div>
+                <div class="story-info">
+                    <h1>Energieoptimierung Survey</h1>
+                    <p>Frage 3 von 5</p>
+                </div>
+            </div>
+            <div class="visual-container">
+                <div class="minimal-graphic">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="25" y="30" width="50" height="40" stroke="white" stroke-width="3" rx="5"/>
+                        <line x1="50" y1="30" x2="50" y2="20" stroke="white" stroke-width="3"/>
+                        <circle cx="50" cy="15" r="5" fill="white"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="question-area">
+                <div class="question-text">Was würdest du gerne verbessern/optimieren?</div>
+                <div class="story-options">
+                    <div class="option" data-value="beleuchtung">💡 Beleuchtung modernisieren</div>
+                    <div class="option" data-value="energie">⚡ Energiekosten senken</div>
+                    <div class="option" data-value="smarthome">🏠 Komplettes Smart Home aufbauen</div>
+                    <div class="option" data-value="elektro">🔌 Elektroinstallation erweitern/sanieren</div>
+                    <div class="option" data-value="beratung">💭 Erstmal nur Beratung, was möglich ist</div>
+                </div>
+                <button class="next-button" onclick="nextQuestion()">Weiter →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="story-slide" data-question="4">
+        <div class="gradient-bg bg-q4"></div>
+        <div class="story-overlay"></div>
+        <div class="story-content">
+            <div class="progress-bars">
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar active"></div>
+                <div class="progress-bar"></div>
+            </div>
+            <div class="story-header">
+                <div class="story-logo">⚡</div>
+                <div class="story-info">
+                    <h1>Energieoptimierung Survey</h1>
+                    <p>Frage 4 von 5</p>
+                </div>
+            </div>
+            <div class="visual-container">
+                <div class="minimal-graphic">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="30" stroke="white" stroke-width="3"/>
+                        <line x1="50" y1="50" x2="50" y2="30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="50" y1="50" x2="65" y2="50" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="question-area">
+                <div class="question-text">Wann kannst du dir eine Umsetzung vorstellen?</div>
+                <div class="story-options">
+                    <div class="option" data-value="6monate">🚀 Innerhalb der nächsten 6 Monate</div>
+                    <div class="option" data-value="1jahr">📅 Innerhalb der nächsten 1,5 Jahre</div>
+                    <div class="option" data-value="irgendwann">💭 Irgendwann mal, keine Eile</div>
+                    <div class="option" data-value="info">🤔 Erstmal nur informieren</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="story-slide" data-question="5">
+        <div class="gradient-bg bg-q5"></div>
+        <div class="story-overlay"></div>
+        <div class="story-content">
+            <div class="progress-bars">
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar completed"></div>
+                <div class="progress-bar active"></div>
+            </div>
+            <div class="story-header">
+                <div class="story-logo">⚡</div>
+                <div class="story-info">
+                    <h1>Energieoptimierung Survey</h1>
+                    <p>Frage 5 von 5</p>
+                </div>
+            </div>
+            <div class="visual-container">
+                <div class="minimal-graphic">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M50 25 L50 75" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M35 60 L50 75 L65 60" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="question-area">
+                <div class="question-text">Was hält dich aktuell noch zurück?</div>
+                <div class="story-options">
+                    <div class="option" data-value="budget">💰 Budget / Kosten sind unklar</div>
+                    <div class="option" data-value="wiewo">🤷 Weiß nicht wo/wie ich anfangen kann</div>
+                    <div class="option" data-value="zeit">⏰ Keine Zeit für Planung</div>
+                    <div class="option" data-value="anbieter">👷 Finde keinen vertrauenswürdigen Anbieter</div>
+                    <div class="option" data-value="bereit">✅ Nichts - ich bin bereit!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div class="result-screen" id="resultScreen">
+        <div class="celebration">✨</div>
+        <h2 class="result-title">Vielen Dank!</h2>
+        <p class="result-text">
+            Deine Antworten helfen uns sehr, unsere Dienstleistungen besser auf deine Bedürfnisse abzustimmen.
+        </p>
+        <div class="loading-spinner" id="loadingSpinner"></div>
+        <div class="error-message" id="errorMessage">
+            Hinweis: Die Antworten konnten nicht gespeichert werden. Bitte überprüfe deine Internet-Verbindung.
+        </div>
+    </div>
+</div>
+
+<script>
+    // ⚠️ WICHTIG: Diese URL durch deine Google Apps Script Web-App URL ersetzen!
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyk0nUo3CNX-SQOnavEWSLZyu154cOZIwkT0p6GyQ3XlbN9C3oUQBGIuKhCQdy7OpDV/exec';
+
+    let currentSlide = 0;
+    const answers = {};
+    const slides = document.querySelectorAll('.story-slide');
+    const resultScreen = document.getElementById('resultScreen');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const errorMessage = document.getElementById('errorMessage');
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            if (i === index) slide.classList.add('active');
+        });
+    }
+
+    function startSurvey() {
+        currentSlide = 1;
+        showSlide(currentSlide);
+    }
+
+    async function submitToGoogleSheets(data) {
+        try {
+            loadingSpinner.classList.add('active');
+            
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            // no-cors mode bedeutet wir bekommen keine Response, aber das ist ok
+            loadingSpinner.classList.remove('active');
+            console.log('Daten erfolgreich gesendet!');
+            
+        } catch (error) {
+            console.error('Fehler beim Senden:', error);
+            loadingSpinner.classList.remove('active');
+            errorMessage.classList.add('active');
+        }
+    }
+
+    function nextQuestion() {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+            showSlide(currentSlide);
+        } else {
+            finishSurvey();
+        }
+    }
+
+    function finishSurvey() {
+        slides.forEach(s => s.style.display = 'none');
+        resultScreen.classList.add('active');
+        
+        // Daten für Google Sheets vorbereiten
+        const surveyData = {
+            timestamp: new Date().toISOString(),
+            frage1: answers[1] || '',
+            frage2: Array.isArray(answers[2]) ? answers[2].join(', ') : '',
+            frage3: Array.isArray(answers[3]) ? answers[3].join(', ') : '',
+            frage4: answers[4] || '',
+            frage5: answers[5] || ''
+        };
+
+        console.log('Survey Results:', surveyData);
+        
+        // An Google Sheets senden
+        if (GOOGLE_SCRIPT_URL !== 'HIER_DEINE_GOOGLE_SCRIPT_URL_EINFÜGEN') {
+            submitToGoogleSheets(surveyData);
+        } else {
+            console.warn('⚠️ Google Script URL noch nicht konfiguriert!');
+            errorMessage.textContent = 'Hinweis: Google Sheets Integration noch nicht eingerichtet.';
+            errorMessage.classList.add('active');
+        }
+    }
+
+    document.querySelectorAll('.option').forEach(option => {
+        option.addEventListener('click', function() {
+            const slide = this.closest('.story-slide');
+            const questionNum = parseInt(slide.dataset.question);
+            
+            if (questionNum === 2 || questionNum === 3) {
+                this.classList.toggle('selected');
+                const selected = slide.querySelectorAll('.option.selected');
+                const btn = slide.querySelector('.next-button');
+                btn.classList.toggle('active', selected.length > 0);
+                answers[questionNum] = Array.from(selected).map(opt => opt.dataset.value);
+            } else {
+                slide.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                answers[questionNum] = this.dataset.value;
+                
+                setTimeout(() => {
+                    if (currentSlide < slides.length - 1) {
+                        currentSlide++;
+                        showSlide(currentSlide);
+                    } else {
+                        finishSurvey();
+                    }
+                }, 300);
+            }
+        });
+    });
+</script>
+```
+
+</body>
+</html>
