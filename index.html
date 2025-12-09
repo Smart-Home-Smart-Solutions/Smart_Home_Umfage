@@ -102,7 +102,7 @@
     .progress-bars {
         display: flex;
         gap: 4px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .progress-bar {
@@ -120,20 +120,20 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 
     .story-logo {
-        font-size: 32px;
+        font-size: 28px;
     }
 
     .story-info h1 {
-        font-size: 17px;
+        font-size: 16px;
         font-weight: 700;
     }
 
     .story-info p {
-        font-size: 13px;
+        font-size: 12px;
         opacity: 0.9;
     }
 
@@ -141,60 +141,74 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 20px 0;
-        min-height: 180px;
+        margin: 10px 0;
+        min-height: 140px;
     }
 
     .minimal-graphic {
-        width: 160px;
-        height: 160px;
+        width: 130px;
+        height: 130px;
         display: flex;
         align-items: center;
         justify-content: center;
         background: rgba(255,255,255,0.15);
-        border-radius: 30px;
+        border-radius: 25px;
         backdrop-filter: blur(10px);
         border: 2px solid rgba(255,255,255,0.3);
     }
 
     .minimal-graphic svg {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
     }
 
     .question-area {
-        margin-top: auto;
-        margin-bottom: 20px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        padding-bottom: 10px;
     }
 
     .question-text {
-        font-size: 28px;
+        font-size: 24px;
         font-weight: 800;
         line-height: 1.2;
         text-shadow: 0 4px 12px rgba(0,0,0,0.8);
-        margin-bottom: 24px;
+        margin-bottom: 16px;
+        flex-shrink: 0;
+    }
+
+    .options-wrapper {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        min-height: 0;
+        margin-bottom: 10px;
     }
 
     .story-options {
         display: flex;
         flex-direction: column;
         gap: 10px;
-        margin-bottom: 20px;
+        padding-right: 5px;
     }
     
     .next-button {
         background: rgba(255,255,255,0.9);
         border: 2px solid white;
         border-radius: 50px;
-        padding: 18px 40px;
-        margin-top: 20px;
+        padding: 16px 35px;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 700;
         color: #667eea;
         text-align: center;
         display: none;
+        flex-shrink: 0;
+        margin-top: auto;
     }
 
     .next-button.active {
@@ -204,13 +218,14 @@
     .option {
         background: rgba(255,255,255,0.2);
         border: 2px solid rgba(255,255,255,0.3);
-        border-radius: 16px;
-        padding: 20px 24px;
+        border-radius: 14px;
+        padding: 16px 20px;
         cursor: pointer;
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 600;
         color: white;
         transition: all 0.2s ease;
+        flex-shrink: 0;
     }
 
     .option.selected {
@@ -338,11 +353,21 @@
     @media (max-width: 480px) {
         .intro-title { font-size: 36px; }
         .intro-subtitle { font-size: 17px; }
-        .question-text { font-size: 24px; }
-        .option { font-size: 15px; padding: 18px 20px; }
+        .question-text { font-size: 22px; }
+        .option { font-size: 14px; padding: 14px 18px; }
         .result-title { font-size: 32px; }
-        .minimal-graphic { width: 140px; height: 140px; }
-        .minimal-graphic svg { width: 80px; height: 80px; }
+        .minimal-graphic { width: 120px; height: 120px; }
+        .minimal-graphic svg { width: 70px; height: 70px; }
+        .story-header { margin-bottom: 10px; }
+        .visual-container { min-height: 120px; margin: 8px 0; }
+    }
+
+    @media (max-height: 700px) {
+        .visual-container { min-height: 100px; margin: 5px 0; }
+        .minimal-graphic { width: 100px; height: 100px; }
+        .minimal-graphic svg { width: 60px; height: 60px; }
+        .question-text { font-size: 20px; margin-bottom: 12px; }
+        .option { padding: 12px 16px; }
     }
 </style>
 ```
@@ -395,11 +420,13 @@
             </div>
             <div class="question-area">
                 <div class="question-text">Wo stehst du beim Thema Energieoptimierung?</div>
-                <div class="story-options">
-                    <div class="option" data-value="interessiert">❓ Interessiert mich, weiß aber nicht wo ich anfangen soll</div>
-                    <div class="option" data-value="habe">✅ Habe bereits Smart Home / PV / Wärmepumpe</div>
-                    <div class="option" data-value="eigenheim">🏠 Bin Eigenheimbesitzer & plane Umbau/Optimierung</div>
-                    <div class="option" data-value="mieter">🏢 Bin Mieter / Kann nur eingeschränkt was ändern</div>
+                <div class="options-wrapper">
+                    <div class="story-options">
+                        <div class="option" data-value="interessiert">❓ Interessiert mich, weiß aber nicht wo ich anfangen soll</div>
+                        <div class="option" data-value="habe">✅ Habe bereits Smart Home / PV / Wärmepumpe</div>
+                        <div class="option" data-value="eigenheim">🏠 Bin Eigenheimbesitzer & plane Umbau/Optimierung</div>
+                        <div class="option" data-value="mieter">🏢 Bin Mieter / Kann nur eingeschränkt ändern</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -434,11 +461,13 @@
             </div>
             <div class="question-area">
                 <div class="question-text">Was ist dir bei einer Lösung am wichtigsten?</div>
-                <div class="story-options">
-                    <div class="option" data-value="guenstig">💰 Günstige & schnelle Umsetzung</div>
-                    <div class="option" data-value="preis">⚖️ Gutes Preis-Leistungs-Verhältnis</div>
-                    <div class="option" data-value="qualitaet">✨ Qualität & Langlebigkeit</div>
-                    <div class="option" data-value="beratung">🤝 Professionelle Beratung & Betreuung</div>
+                <div class="options-wrapper">
+                    <div class="story-options">
+                        <div class="option" data-value="guenstig">💰 Günstige & schnelle Umsetzung</div>
+                        <div class="option" data-value="preis">⚖️ Gutes Preis-Leistungs-Verhältnis</div>
+                        <div class="option" data-value="qualitaet">✨ Qualität & Langlebigkeit</div>
+                        <div class="option" data-value="beratung">🤝 Professionelle Beratung & Betreuung</div>
+                    </div>
                 </div>
                 <button class="next-button" onclick="nextQuestion()">Weiter →</button>
             </div>
@@ -475,12 +504,14 @@
             </div>
             <div class="question-area">
                 <div class="question-text">Was würdest du gerne verbessern/optimieren?</div>
-                <div class="story-options">
-                    <div class="option" data-value="beleuchtung">💡 Beleuchtung modernisieren</div>
-                    <div class="option" data-value="energie">⚡ Energiekosten senken</div>
-                    <div class="option" data-value="smarthome">🏠 Komplettes Smart Home aufbauen</div>
-                    <div class="option" data-value="elektro">🔌 Elektroinstallation erweitern/sanieren</div>
-                    <div class="option" data-value="beratung">💭 Erstmal nur Beratung, was möglich ist</div>
+                <div class="options-wrapper">
+                    <div class="story-options">
+                        <div class="option" data-value="beleuchtung">💡 Beleuchtung modernisieren</div>
+                        <div class="option" data-value="energie">⚡ Energiekosten senken</div>
+                        <div class="option" data-value="smarthome">🏠 Komplettes Smart Home aufbauen</div>
+                        <div class="option" data-value="elektro">🔌 Elektroinstallation erweitern/sanieren</div>
+                        <div class="option" data-value="beratung">💭 Erstmal nur Beratung, was möglich ist</div>
+                    </div>
                 </div>
                 <button class="next-button" onclick="nextQuestion()">Weiter →</button>
             </div>
@@ -517,11 +548,13 @@
             </div>
             <div class="question-area">
                 <div class="question-text">Wann kannst du dir eine Umsetzung vorstellen?</div>
-                <div class="story-options">
-                    <div class="option" data-value="6monate">🚀 Innerhalb der nächsten 6 Monate</div>
-                    <div class="option" data-value="1jahr">📅 Innerhalb der nächsten 1,5 Jahre</div>
-                    <div class="option" data-value="irgendwann">💭 Irgendwann mal, keine Eile</div>
-                    <div class="option" data-value="info">🤔 Erstmal nur informieren</div>
+                <div class="options-wrapper">
+                    <div class="story-options">
+                        <div class="option" data-value="6monate">🚀 Innerhalb der nächsten 6 Monate</div>
+                        <div class="option" data-value="1jahr">📅 Innerhalb der nächsten 1,5 Jahre</div>
+                        <div class="option" data-value="irgendwann">💭 Irgendwann mal, keine Eile</div>
+                        <div class="option" data-value="info">🤔 Erstmal nur informieren</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -556,12 +589,14 @@
             </div>
             <div class="question-area">
                 <div class="question-text">Was hält dich aktuell noch zurück?</div>
-                <div class="story-options">
-                    <div class="option" data-value="budget">💰 Budget / Kosten sind unklar</div>
-                    <div class="option" data-value="wiewo">🤷 Weiß nicht wo/wie ich anfangen kann</div>
-                    <div class="option" data-value="zeit">⏰ Keine Zeit für Planung</div>
-                    <div class="option" data-value="anbieter">👷 Finde keinen vertrauenswürdigen Anbieter</div>
-                    <div class="option" data-value="bereit">✅ Nichts - ich bin bereit!</div>
+                <div class="options-wrapper">
+                    <div class="story-options">
+                        <div class="option" data-value="budget">💰 Budget / Kosten unklar</div>
+                        <div class="option" data-value="wiewo">🤷 Weiß nicht wo/wie man anfangen kann</div>
+                        <div class="option" data-value="zeit">⏰ Keine Zeit für Planung</div>
+                        <div class="option" data-value="anbieter">👷 Finde keinen vertrauenswürdigen Anbieter</div>
+                        <div class="option" data-value="bereit">✅ Nichts - ich bin bereit!</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -617,7 +652,6 @@
                 body: JSON.stringify(data)
             });
 
-            // no-cors mode bedeutet wir bekommen keine Response, aber das ist ok
             loadingSpinner.classList.remove('active');
             console.log('Daten erfolgreich gesendet!');
             
@@ -641,7 +675,6 @@
         slides.forEach(s => s.style.display = 'none');
         resultScreen.classList.add('active');
         
-        // Daten für Google Sheets vorbereiten
         const surveyData = {
             timestamp: new Date().toISOString(),
             frage1: answers[1] || '',
@@ -653,7 +686,6 @@
 
         console.log('Survey Results:', surveyData);
         
-        // An Google Sheets senden
         if (GOOGLE_SCRIPT_URL !== 'HIER_DEINE_GOOGLE_SCRIPT_URL_EINFÜGEN') {
             submitToGoogleSheets(surveyData);
         } else {
